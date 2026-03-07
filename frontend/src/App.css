@@ -72,6 +72,38 @@
   border-color: rgba(96, 165, 250, 0.7);
 }
 
+.user-greeting {
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.logout-button {
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  color: #fca5a5;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms ease;
+  box-shadow: none;
+}
+
+.logout-button:hover {
+  background: rgba(220, 38, 38, 0.25);
+  border-color: rgba(248, 113, 113, 0.6);
+  color: #fecaca;
+  transform: translateY(-1px);
+}
+
+.logout-button:active {
+  transform: translateY(0);
+}
+
 .app-main {
   flex: 1;
   background: radial-gradient(

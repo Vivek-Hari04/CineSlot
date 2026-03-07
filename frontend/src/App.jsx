@@ -1,6 +1,6 @@
 import './App.css';
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import MovieDetailsPage from './pages/MovieDetailsPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -10,9 +10,18 @@ import SeatSelectionPage from './pages/SeatSelectionPage';
 import FavoritesPage from './pages/FavoritesPage';
 import SearchOverlay from './components/SearchOverlay';
 import Footer from './components/Footer';
+import { useAuth } from './context/AuthContext';
+
+// Admin Pages
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminOverview from './pages/admin/AdminOverview';
+import AdminAddMovie from './pages/admin/AdminAddMovie';
+import AdminAddShow from './pages/admin/AdminAddShow';
+import AdminUsers from './pages/admin/AdminUsers';
 
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <BrowserRouter>
@@ -30,7 +39,14 @@ function App() {
               <Link to="/bookings">My Bookings</Link>
             </nav>
             <nav className="app-nav app-nav-auth">
-              <Link to="/login">Login / Sign up</Link>
+              {user ? (
+                <>
+                  <span className="user-greeting">Hi, {user.name}</span>
+                  <button className="logout-button" onClick={logout}>Logout</button>
+                </>
+              ) : (
+                <Link to="/login">Login / Sign up</Link>
+              )}
             </nav>
           </header>
 
@@ -43,6 +59,16 @@ function App() {
               <Route path="/favorites" element={<FavoritesPage />} />
               <Route path="/movies/:id" element={<MovieDetailsPage />} />
               <Route path="/shows/:showId/seats" element={<SeatSelectionPage />} />
+              
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<AdminOverview />} />
+                <Route path="movies/add" element={<AdminAddMovie />} />
+                <Route path="shows/add" element={<AdminAddShow />} />
+                <Route path="users" element={<AdminUsers />} />
+              </Route>
+
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </main>

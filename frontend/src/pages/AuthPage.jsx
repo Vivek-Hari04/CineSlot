@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import api from '../apiClient';
+import { useAuth } from '../context/AuthContext';
 
 function LoginForm({ onSuccess }) {
   const [email, setEmail] = useState('');
@@ -139,6 +140,7 @@ function SignupForm({ onSuccess }) {
 function AuthPage({ initialMode = 'login' }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const startingMode = location.pathname.includes('signup') ? 'signup' : initialMode;
   const [mode, setMode] = useState(startingMode);
@@ -148,9 +150,12 @@ function AuthPage({ initialMode = 'login' }) {
   }, [location.pathname]);
 
   const handleAuthSuccess = (user) => {
-    window.localStorage.setItem('cineslotUserId', user.id);
-    window.localStorage.setItem('cineslotUserName', user.name);
-    navigate('/bookings');
+    login(user);
+    if (user.role === 'admin') {
+      navigate('/admin/dashboard');
+    } else {
+      navigate('/bookings');
+    }
   };
 
   return (
