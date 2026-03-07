@@ -14,7 +14,9 @@ const bookingRoutes = require('./routes/bookingRoutes');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "https://cine-slot.vercel.app"
+}));
 app.use(express.json());
 app.use(logger);
 
@@ -42,4 +44,3 @@ connectDB().then(() => {
     console.log(`Server running on port ${PORT}`);
   });
 });
-
