@@ -25,6 +25,7 @@ function SeatSelectionPage() {
   const [loading, setLoading] = useState(true);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [message, setMessage] = useState('');
+  const [isBooked, setIsBooked] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,8 +66,8 @@ function SeatSelectionPage() {
     }
 
     const userId = window.localStorage.getItem('cineslotUserId');
-    if (!userId) {
-      setMessage('Login or sign up before booking seats.');
+    if (!userId || userId === 'undefined' || userId === 'null') {
+      setMessage('Your session has expired or is invalid. Please log out and back in.');
       return;
     }
 
@@ -80,10 +81,7 @@ function SeatSelectionPage() {
         totalAmount,
       });
 
-      setMessage('Booking confirmed! Redirecting to your bookings…');
-      setTimeout(() => {
-        navigate('/bookings');
-      }, 1200);
+      setIsBooked(true);
     } catch (err) {
       console.error(err);
       const msg = err.response?.data?.message || 'Booking failed. Please try again.';
@@ -101,6 +99,27 @@ function SeatSelectionPage() {
 
   const pricePerTicket = show.basePrice;
   const total = pricePerTicket * selectedSeats.length;
+
+  if (isBooked) {
+    return (
+      <div className="empty-state" style={{ marginTop: '3rem' }}>
+        <h2 style={{ color: '#4ade80', fontSize: '1.75rem', marginBottom: '1rem', fontWeight: '700' }}>
+          Booking Successful!
+        </h2>
+        <p style={{ color: '#cbd5f5', fontSize: '1.1rem', marginBottom: '2.5rem' }}>
+          Your seat(s) {selectedSeats.join(', ')} have been confirmed.
+        </p>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+          <button type="button" className="secondary-button" onClick={() => navigate('/')}>
+            Return Home
+          </button>
+          <button type="button" onClick={() => navigate('/bookings')}>
+            View Booking
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

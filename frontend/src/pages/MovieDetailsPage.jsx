@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import api from '../apiClient';
+import { useAuth } from '../context/AuthContext';
 
 function MovieDetailsPage() {
   const { id } = useParams();
@@ -11,8 +12,11 @@ function MovieDetailsPage() {
   const [selectedDayIndex, setSelectedDayIndex] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useAuth();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const load = async () => {
       try {
         setLoading(true);
@@ -62,6 +66,11 @@ function MovieDetailsPage() {
   };
 
   const handleSelectSeats = () => {
+    if (!user) {
+      navigate('/login', { state: { from: location.pathname } });
+      return;
+    }
+
     const show = findSelectedShow();
     if (!show) {
       setMessage('No show configured for that date and time yet.');

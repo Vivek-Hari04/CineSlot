@@ -1,16 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import api from '../apiClient';
 import { useAuth } from '../context/AuthContext';
 
 function LoginForm({ onSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email.toLowerCase().endsWith('@gmail.com')) {
+      setError('Please use a @gmail.com email address.');
+      return;
+    }
     setError('');
     setLoading(true);
 
@@ -38,20 +44,30 @@ function LoginForm({ onSuccess }) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            pattern=".*@gmail\.com"
             required
-            placeholder="you@example.com"
+            placeholder="you@gmail.com"
           />
         </label>
 
         <label className="auth-field">
           <span>Password</span>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="••••••••"
-          />
+          <div className="password-input-wrapper">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="••••••••"
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+            </button>
+          </div>
         </label>
 
         {error && <div className="auth-error">{error}</div>}
@@ -68,11 +84,22 @@ function SignupForm({ onSuccess }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email.toLowerCase().endsWith('@gmail.com')) {
+      setError('Please use a @gmail.com email address.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
     setError('');
     setLoading(true);
 
@@ -111,20 +138,50 @@ function SignupForm({ onSuccess }) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            pattern=".*@gmail\.com"
             required
-            placeholder="you@example.com"
+            placeholder="you@gmail.com"
           />
         </label>
 
         <label className="auth-field">
           <span>Password</span>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="Create a password"
-          />
+          <div className="password-input-wrapper">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Create a password"
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+            </button>
+          </div>
+        </label>
+
+        <label className="auth-field">
+          <span>Confirm Password</span>
+          <div className="password-input-wrapper">
+            <input
+              type={showConfirmPassword ? 'text' : 'password'}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              placeholder="Confirm your password"
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+            </button>
+          </div>
         </label>
 
         {error && <div className="auth-error">{error}</div>}
@@ -137,10 +194,19 @@ function SignupForm({ onSuccess }) {
   );
 }
 
+const QUOTES = [
+  "“Cinema is a matter of what's in the frame and what's out.”",
+  "“Every time I go to a movie, it's magic, no matter what the movie's about.”",
+  "“Photography is truth. The cinema is truth twenty-four times per second.”",
+  "“There are no rules in filmmaking. Only sins. And the cardinal sin is dullness.”",
+  "“To make a great film you need three things – the script, the script, and the script.”",
+];
+
 function AuthPage({ initialMode = 'login' }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [quote, setQuote] = useState('');
 
   const startingMode = location.pathname.includes('signup') ? 'signup' : initialMode;
   const [mode, setMode] = useState(startingMode);
@@ -149,12 +215,19 @@ function AuthPage({ initialMode = 'login' }) {
     setMode(location.pathname.includes('signup') ? 'signup' : 'login');
   }, [location.pathname]);
 
+  useEffect(() => {
+    // Pick a random quote on mount
+    const randomIndex = Math.floor(Math.random() * QUOTES.length);
+    setQuote(QUOTES[randomIndex]);
+  }, []);
+
   const handleAuthSuccess = (user) => {
     login(user);
     if (user.role === 'admin') {
       navigate('/admin/dashboard');
     } else {
-      navigate('/bookings');
+      const from = location.state?.from || '/';
+      navigate(from, { replace: true });
     }
   };
 
@@ -162,7 +235,7 @@ function AuthPage({ initialMode = 'login' }) {
     <div className="auth-layout">
       <div className="auth-hero">
         <p className="auth-hero-text">
-          “Cinema is a matter of what&apos;s in the frame and what&apos;s out.”
+          {quote}
         </p>
       </div>
 

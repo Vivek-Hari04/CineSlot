@@ -42,14 +42,15 @@ router.post('/', async (req, res) => {
       status: 'confirmed',
     });
 
-    const populated = await booking
-      .populate({ path: 'show', populate: 'movie' })
-      .populate('user', 'name email');
+    const populated = await booking.populate([
+      { path: 'show', populate: 'movie' },
+      { path: 'user', select: 'name email' },
+    ]);
 
     return res.status(201).json(populated);
   } catch (err) {
     console.error('Create booking error:', err);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: err.message || 'Server error' });
   }
 });
 
@@ -101,9 +102,10 @@ router.patch('/:id/cancel', async (req, res) => {
     booking.status = 'cancelled';
     await booking.save();
 
-    const populated = await booking
-      .populate({ path: 'show', populate: 'movie' })
-      .populate('user', 'name email');
+    const populated = await booking.populate([
+      { path: 'show', populate: 'movie' },
+      { path: 'user', select: 'name email' },
+    ]);
 
     return res.json(populated);
   } catch (err) {
