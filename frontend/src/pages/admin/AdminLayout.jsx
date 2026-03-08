@@ -9,12 +9,12 @@ function AdminLayout() {
   // Basic check for admin access (in a real app, this should check user.role)
   // For now, if no user, redirect to login
   if (!user) {
-     return (
-       <div className="admin-access-denied">
-         <p>You must be an admin to view this page.</p>
-         <button className="secondary-button" onClick={() => navigate('/login')}>Login</button>
-       </div>
-     );
+    return (
+      <div className="admin-access-denied">
+        <p>You must be an admin to view this page.</p>
+        <button className="secondary-button" onClick={() => navigate('/login')}>Login</button>
+      </div>
+    );
   }
 
   const handleSignOut = () => {
@@ -26,46 +26,41 @@ function AdminLayout() {
     <div className="admin-layout">
       <aside className="admin-sidebar">
         <div className="admin-logo-container">
-          <div className="admin-logo">LOGO</div>
+          <div className="admin-logo">ADMIN</div>
         </div>
-        
+
         <nav className="admin-nav">
-          <NavLink 
-            to="/admin/dashboard" 
+          <NavLink
+            to="/admin/dashboard"
             className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`}
           >
             Dashboard
           </NavLink>
-          <NavLink 
-            to="/admin/movies/add" 
+          <NavLink
+            to="/admin/movies/add"
             className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`}
           >
-             Add Movies
+            Add Movies
           </NavLink>
-          <NavLink 
-            to="/admin/shows/add" 
+          <NavLink
+            to="/admin/shows/add"
             className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`}
           >
-             Add Shows
+            Add Shows
           </NavLink>
-          <NavLink 
-            to="/admin/users" 
+          <NavLink
+            to="/admin/users"
             className={({ isActive }) => `admin-nav-link ${isActive ? 'active' : ''}`}
           >
-             Users
+            Users
           </NavLink>
         </nav>
 
-        <div className="admin-sidebar-footer">
-          <button className="admin-signout-btn" onClick={handleSignOut}>
-            Sign Out
-          </button>
-        </div>
       </aside>
 
       <main className="admin-main-content">
         <div className="admin-header">
-           <h1>ADMIN DASHBOARD</h1>
+          <h1>ADMIN DASHBOARD</h1>
         </div>
         <div className="admin-content-area">
           <Outlet />

@@ -35,8 +35,14 @@ function App() {
             </div>
             <nav className="app-nav app-nav-main">
               <Link to="/">Home</Link>
-              <Link to="/favorites">Favourites</Link>
-              <Link to="/bookings">My Bookings</Link>
+              {user?.role === 'admin' ? (
+                <Link to="/admin/dashboard">Dashboard</Link>
+              ) : (
+                <>
+                  <Link to="/favorites">Favourites</Link>
+                  <Link to="/bookings">My Bookings</Link>
+                </>
+              )}
             </nav>
             <nav className="app-nav app-nav-auth">
               {user ? (
