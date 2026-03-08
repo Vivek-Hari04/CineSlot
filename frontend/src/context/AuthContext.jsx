@@ -30,6 +30,7 @@ export function AuthProvider({ children }) {
     window.localStorage.removeItem('cineslotUserName');
     window.localStorage.removeItem('cineslotUserRole');
     setUser(null);
+    window.location.href = '/';
   };
 
   return (
