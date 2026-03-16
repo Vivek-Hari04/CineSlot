@@ -859,3 +859,154 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* --- Mobile Responsiveness --- */
+
+@media (max-width: 1024px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    background: rgba(15, 23, 42, 0.9);
+    position: sticky;
+    top: 1rem;
+    z-index: 50;
+  }
+
+  .admin-logo-container {
+    padding: 0;
+    border-bottom: none;
+  }
+
+  .admin-logo {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+
+  .admin-nav {
+    flex-direction: row;
+    padding: 0;
+    gap: 0.5rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    margin: 0 1rem;
+  }
+  
+  /* Hide scrollbar for nav */
+  .admin-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .admin-nav {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .admin-nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+  }
+
+  .admin-nav-link.active {
+    border-right: none;
+    border-bottom: 2px solid #38bdf8;
+    background-color: rgba(56, 189, 248, 0.1);
+  }
+
+  .admin-sidebar-footer {
+    padding: 0;
+    border-top: none;
+    margin-top: 0;
+  }
+
+  .admin-signout-btn {
+    padding: 0.5rem 1rem;
+    width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 1rem;
+  }
+
+  .admin-content-area {
+    padding: 1rem;
+  }
+
+  .admin-movie-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .admin-movies-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .admin-movie-poster-mini {
+    height: 200px;
+  }
+
+  .admin-shows-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .admin-show-filters {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+
+  .admin-movie-select {
+    max-width: 100%;
+  }
+
+  .admin-show-times-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-modal-content {
+    margin: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-sidebar {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .admin-nav {
+    order: 3;
+    width: 100%;
+    margin: 0;
+  }
+
+  .admin-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admin-movie-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .admin-movies-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .time-slots-container {
+    justify-content: center;
+  }
+}
