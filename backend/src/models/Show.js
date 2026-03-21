@@ -30,7 +30,7 @@ const showSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
-      enum: ['scheduled', 'cancelled'],
+      enum: ['scheduled', 'cancelled', 'completed'],
       default: 'scheduled',
     },
   },

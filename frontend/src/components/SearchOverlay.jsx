@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../apiClient';
+import { formatMinutesToDisplay } from '../utils/timeFormat';
 
 function SearchOverlay({ open, onClose }) {
   const [movies, setMovies] = useState([]);
@@ -99,7 +100,7 @@ function SearchOverlay({ open, onClose }) {
                     <div className="search-overlay-card-body">
                       <h3 className="search-overlay-card-title">{movie.title}</h3>
                       <div className="search-overlay-card-meta">
-                        {movie.duration && <span>{movie.duration} min</span>}
+                        {movie.duration && <span>{formatMinutesToDisplay(movie.duration)}</span>}
                         {movie.language && <span>{movie.language}</span>}
                       </div>
                     </div>

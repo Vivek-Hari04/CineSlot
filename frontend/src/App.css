@@ -1088,15 +1088,27 @@
   }
 
   .app-header {
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    width: 100%;
+    overflow: hidden;
   }
   
   .app-nav {
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.5rem;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem; /* space for scroll bar */
+    scrollbar-width: none;
+  }
+  
+  .app-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .app-nav-main {
@@ -1108,20 +1120,6 @@
     order: 2;
     width: auto;
     justify-content: center;
-  }
-
-  /* Wrap the two navs together in a single scrollable or wrapped line if needed, 
-     but user requested "in one line" */
-  .app-header {
-    flex-direction: column; 
-  }
-  
-  /* A trick to keep all links on one line without squeezing too much: 
-     Allow the header to contain a row for the logo, and a row for the navs. */
-  .app-header {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
   }
 
   .page-layout-two-column {

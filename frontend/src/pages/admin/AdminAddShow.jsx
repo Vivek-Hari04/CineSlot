@@ -121,6 +121,20 @@ function AdminAddShow() {
     }
   };
 
+  const handleCleanup = async () => {
+    if (!window.confirm('Are you sure you want to permanently delete all completed shows from yesterday and older?')) return;
+    try {
+      const res = await api.delete('/shows/cleanup/expired');
+      alert(`Cleanup successful! Wiped ${res.data.count} old shows.`);
+      if (selectedMovie) {
+        loadShowsForMovie(selectedMovie);
+      }
+    } catch (err) {
+      console.error('Failed to cleanup shows:', err);
+      alert('Error during cleanup.');
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -212,9 +226,14 @@ function AdminAddShow() {
     <div className="admin-shows-management">
       <div className="admin-shows-header">
         <h2 className="admin-section-title">MANAGE SHOWS</h2>
-        <button className="admin-action-btn primary" onClick={handleOpenAddModal}>
-          <FiPlus size={18} /> Add Show
-        </button>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button className="admin-action-btn secondary" onClick={handleCleanup}>
+            <FiTrash2 size={18} /> Clean Up
+          </button>
+          <button className="admin-action-btn primary" onClick={handleOpenAddModal}>
+            <FiPlus size={18} /> Add Show
+          </button>
+        </div>
       </div>
 
       <div className="admin-show-filters">

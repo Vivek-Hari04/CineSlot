@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import api from '../apiClient';
 import { useAuth } from '../context/AuthContext';
+import { formatMinutesToDisplay } from '../utils/timeFormat';
 
 function MovieDetailsPage() {
   const { id } = useParams();
@@ -111,7 +112,7 @@ function MovieDetailsPage() {
                 </span>
               ))}
               {movie.language && <span className="pill">{movie.language}</span>}
-              {movie.duration && <span className="pill">{movie.duration} min</span>}
+              {movie.duration && <span className="pill">{formatMinutesToDisplay(movie.duration)}</span>}
               {typeof movie.rating === 'number' && (
                 <span className="pill rating-pill">★ {movie.rating}</span>
               )}

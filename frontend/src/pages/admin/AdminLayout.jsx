@@ -17,11 +17,6 @@ function AdminLayout() {
     );
   }
 
-  const handleSignOut = () => {
-    logout();
-    navigate('/');
-  };
-
   return (
     <div className="admin-layout">
       <aside className="admin-sidebar">

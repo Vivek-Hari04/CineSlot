@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../apiClient';
+import { formatMinutesToDisplay } from '../utils/timeFormat';
 
 function HomePage() {
   const [movies, setMovies] = useState([]);
@@ -109,7 +110,7 @@ function HomePage() {
                       </span>
                     ))}
                     {movie.language && <span className="pill">{movie.language}</span>}
-                    {movie.duration && <span className="pill">{movie.duration} min</span>}
+                    {movie.duration && <span className="pill">{formatMinutesToDisplay(movie.duration)}</span>}
                   </div>
 
                   <div className="movie-header-row">

@@ -32,6 +32,24 @@ const checkAndCompleteShow = async (show) => {
   return show;
 };
 
+// Cleanup old completed shows
+router.delete('/cleanup/expired', async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Start of today (midnight)
+    
+    const result = await Show.deleteMany({
+      status: 'completed',
+      showDate: { $lt: today }
+    });
+    
+    return res.json({ message: 'Cleanup successful', count: result.deletedCount });
+  } catch (err) {
+    console.error('Cleanup error:', err);
+    return res.status(500).json({ message: 'Server error during cleanup' });
+  }
+});
+
 // Create show
 router.post('/', async (req, res) => {
   try {

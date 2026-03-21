@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FiEdit2, FiTrash2, FiPlus, FiX } from 'react-icons/fi';
 import api from '../../apiClient';
+import { parseDurationToMinutes, formatMinutesToDisplay } from '../../utils/timeFormat';
 
 function AdminAddMovie() {
   const [movies, setMovies] = useState([]);
@@ -54,8 +55,8 @@ function AdminAddMovie() {
     setFormData({
       title: movie.title || '',
       genre: Array.isArray(movie.genre) ? movie.genre.join(', ') : (movie.genre || ''),
-      language: Array.isArray(movie.language) ? movie.language.join(', ') : (movie.language || ''),
-      duration: movie.duration || '',
+      language: movie.language || '',
+      duration: movie.duration ? formatMinutesToDisplay(movie.duration) : '',
       releaseDate: movie.releaseDate ? new Date(movie.releaseDate).toISOString().split('T')[0] : '',
       rating: movie.rating != null ? movie.rating.toString() : '',
       synopsis: movie.synopsis || '',
@@ -88,8 +89,9 @@ function AdminAddMovie() {
     try {
       const payload = {
         ...formData,
-        genre: formData.genre.split(',').map(g => g.trim()),
-        language: formData.language.split(',').map(l => l.trim()),
+        genre: formData.genre.split(',').map(g => g.trim()).filter(Boolean),
+        language: formData.language.trim(),
+        duration: parseDurationToMinutes(formData.duration),
         rating: Number(formData.rating)
       };
 
@@ -143,7 +145,7 @@ function AdminAddMovie() {
                 <div className="admin-movie-info-mini">
                   <h3>{movie.title}</h3>
                   <div className="admin-movie-meta-mini">
-                    <span>{movie.duration}</span>
+                    <span>{formatMinutesToDisplay(movie.duration)}</span>
                     <span>•</span>
                     <span>⭐ {movie.rating}</span>
                   </div>
@@ -186,14 +188,14 @@ function AdminAddMovie() {
                 </div>
                 <div className="admin-form-group">
                   <label>Language</label>
-                  <input name="language" value={formData.language} onChange={handleChange} placeholder="English, Hindi" required />
+                  <input name="language" value={formData.language} onChange={handleChange} placeholder="e.g. English" required />
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)', gap: '1rem' }}>
                 <div className="admin-form-group">
                   <label>Duration</label>
-                  <input name="duration" value={formData.duration} onChange={handleChange} placeholder="e.g. 148 min" required />
+                  <input type="text" name="duration" value={formData.duration} onChange={handleChange} placeholder="e.g. 148 or 2h 28m" required />
                 </div>
                 <div className="admin-form-group">
                   <label>Release Date</label>
